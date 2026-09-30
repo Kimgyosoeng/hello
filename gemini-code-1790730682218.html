@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>혜택온 (Hyetaek-ON)</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333333;
+            line-height: 1.6;
+        }
+
+        /* 1. 상단 소개 (남색 배경 히어로) */
+        .hero {
+            background-color: #1a2536;
+            color: #ffffff;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .hero .service-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #4da6ff;
+            margin-bottom: 12px;
+        }
+
+        .hero h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            word-break: keep-all;
+        }
+
+        .hero p {
+            font-size: 0.95rem;
+            color: #d1d5db;
+            word-break: keep-all;
+        }
+
+        /* 공통 섹션 레이아웃 */
+        .section {
+            padding: 30px 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #1a2536;
+        }
+
+        /* 2. 특징 3칸 */
+        .features-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .feature-card {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border: 1px solid #e5e7eb;
+        }
+
+        .feature-card h3 {
+            font-size: 1.1rem;
+            color: #1a2536;
+            margin-bottom: 8px;
+        }
+
+        .feature-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-card li {
+            font-size: 0.9rem;
+            color: #4b5563;
+            position: relative;
+            padding-left: 14px;
+            margin-bottom: 4px;
+        }
+
+        .feature-card li::before {
+            content: "-";
+            position: absolute;
+            left: 0;
+        }
+
+        /* 3. 요금표 (선택 가능) */
+        .pricing-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .price-card {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid #e5e7eb;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: block;
+        }
+
+        /* hidden radio button */
+        .price-card input[type="radio"] {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 20px;
+            height: 20px;
+            accent-color: #2563eb;
+            cursor: pointer;
+        }
+
+        /* 선택된 요금제 스타일 */
+        .price-card:has(input[type="radio"]:checked) {
+            border: 2px solid #2563eb;
+            background-color: #f0f6ff;
+        }
+
+        .badge {
+            position: absolute;
+            top: -12px;
+            left: 15px;
+            background-color: #2563eb;
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 4px 10px;
+            border-radius: 12px;
+        }
+
+        .price-card h3 {
+            font-size: 1.2rem;
+            color: #1a2536;
+            padding-right: 30px;
+        }
+
+        .price-card .price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #2563eb;
+            margin: 8px 0;
+        }
+
+        .price-card p {
+            font-size: 0.88rem;
+            color: #4b5563;
+            margin-bottom: 4px;
+        }
+
+        /* 4. FAQ (눌러서 펼침) */
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .faq-item {
+            background-color: #ffffff;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            width: 100%;
+            text-align: left;
+            padding: 15px;
+            background: none;
+            border: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #1a2536;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .faq-answer {
+            display: none;
+            padding: 0 15px 15px 15px;
+            font-size: 0.88rem;
+            color: #4b5563;
+            word-break: keep-all;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+
+        .faq-item.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .toggle-icon {
+            transition: transform 0.2s ease;
+        }
+
+        /* 하단 고정 신청 버튼 영역 및 CTA */
+        .cta-section {
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            max-width: 600px;
+            background-color: #2563eb;
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: bold;
+            padding: 16px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            transition: background-color 0.2s;
+        }
+
+        .btn-submit:active {
+            background-color: #1d4ed8;
+        }
+
+        /* 하단 안내 */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.8rem;
+            color: #6b7280;
+            border-top: 1px solid #e5e7eb;
+            background-color: #ffffff;
+        }
+
+        /* 데모 신청 완료 모달/팝업 */
+        .toast {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(26, 37, 54, 0.95);
+            color: #ffffff;
+            padding: 20px 30px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            z-index: 1000;
+            width: 85%;
+            max-width: 340px;
+            word-break: keep-all;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. 상단 소개 (남색 배경) -->
+    <header class="hero">
+        <div class="service-name">혜택온 (Hyetaek-ON)</div>
+        <h1>매일 가는 편의점, 매일 아끼는 구독 — 혜택온</h1>
+        <p>커피부터 도시락까지, 월 구독 한 번으로 등굣길 소비가 달라집니다.</p>
+    </header>
+
+    <!-- 2. 핵심 특징 3가지 -->
+    <section class="section">
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>1. 매일 커피 구독</h3>
+                <ul>
+                    <li>월 4,900원으로 아메리카노를 매일 1잔 40% 할인</li>
+                    <li>출근길·등교길 커피값 부담을 절반으로</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <h3>2. 점심 도시락 구독</h3>
+                <ul>
+                    <li>월 3,900원으로 도시락·샌드위치를 매일 1개 20% 할인</li>
+                    <li>시험 기간 식비 방어의 필수템</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <h3>3. 앱에서 3초 사용</h3>
+                <ul>
+                    <li>결제도 사용도 앱 바코드 하나로 끝</li>
+                    <li>이번 달 아낀 금액을 앱에서 실시간 확인</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. 요금표 (선택 가능) -->
+    <section class="section">
+        <h2 class="section-title">요금 플랜 선택</h2>
+        <div class="pricing-grid">
+            <label class="price-card">
+                <input type="radio" name="plan" value="커피 플랜">
+                <h3>커피 플랜</h3>
+                <div class="price">월 4,900원</div>
+                <p><strong>주요 혜택:</strong> 아메리카노 매일 1잔 40% 할인</p>
+                <p><strong>추천 대상:</strong> 매일 커피 마시는 통학러</p>
+            </label>
+
+            <label class="price-card">
+                <input type="radio" name="plan" value="도시락 플랜">
+                <h3>도시락 플랜</h3>
+                <div class="price">월 3,900원</div>
+                <p><strong>주요 혜택:</strong> 도시락·샌드위치 매일 1개 20% 할인</p>
+                <p><strong>추천 대상:</strong> 점심을 편의점에서 해결하는 자취생</p>
+            </label>
+
+            <label class="price-card">
+                <span class="badge">추천 플랜</span>
+                <input type="radio" name="plan" value="올인원 플랜" checked>
+                <h3>올인원 플랜</h3>
+                <div class="price">월 7,900원</div>
+                <p><strong>주요 혜택:</strong> 커피+도시락 혜택 전부</p>
+                <p><strong>추천 대상:</strong> 하루 두 번 이상 방문하는 헤비 유저</p>
+            </label>
+        </div>
+    </section>
+
+    <!-- 4. 자주 묻는 질문(FAQ) -->
+    <section class="section">
+        <h2 class="section-title">자주 묻는 질문</h2>
+        <div class="faq-list">
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Q1. 해지는 어떻게 하나요?
+                    <span class="toggle-icon">▼</span>
+                </button>
+                <div class="faq-answer">
+                    A1. 앱의 '내 구독' 화면에서 버튼 한 번으로 즉시 해지됩니다. 남은 기간 혜택은 만료일까지 유지됩니다.
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Q2. 할인 혜택을 하루에 여러 번 쓸 수 있나요?
+                    <span class="toggle-icon">▼</span>
+                </button>
+                <div class="faq-answer">
+                    A2. 플랜별로 하루 1회 사용이 원칙이며, 올인원 플랜은 커피 1회와 도시락 1회를 각각 사용할 수 있습니다.
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Q3. 모든 매장에서 사용할 수 있나요?
+                    <span class="toggle-icon">▼</span>
+                </button>
+                <div class="faq-answer">
+                    A3. 전국 제휴 매장에서 사용 가능하며, 앱 지도에서 가까운 제휴 매장을 확인할 수 있습니다.
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Q4. 구독료가 아깝지 않을까요?
+                    <span class="toggle-icon">▼</span>
+                </button>
+                <div class="faq-answer">
+                    A4. 커피 플랜 기준 월 4회만 사용해도 구독료 이상을 아끼게 됩니다. 앱의 '절약 리포트'가 매달 아낀 금액을 계산해 드립니다.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 신청 버튼 -->
+    <section class="section cta-section">
+        <button class="btn-submit" onclick="submitForm()">지금 무료 체험 시작하기 (첫 달 0원)</button>
+    </section>
+
+    <!-- 하단 안내 -->
+    <footer class="footer">
+        혜택온은 인공지능과경영 수업 실습용 가상 서비스입니다.
+    </footer>
+
+    <!-- 신청 접수 안내 토스트/모달 -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // FAQ 토글 함수
+        function toggleFaq(button) {
+            const faqItem = button.parentElement;
+            faqItem.classList.toggle('active');
+        }
+
+        // 신청 버튼 클릭 처리 (선택된 플랜 표시)
+        function submitForm() {
+            const selectedPlan = document.querySelector('input[name="plan"]:checked').value;
+            const toast = document.getElementById('toast');
+            toast.innerText = `[${selectedPlan}] 신청접수(데모)가 완료되었습니다!`;
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
